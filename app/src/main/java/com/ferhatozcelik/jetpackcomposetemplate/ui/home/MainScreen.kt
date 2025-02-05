@@ -15,7 +15,7 @@ import com.ferhatozcelik.jetpackcomposetemplate.navigation.Screen
 @Composable
 fun MainScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navController: NavHostController,
+    navController: NavHostController
 ) {
 
     Column(
@@ -23,6 +23,19 @@ fun MainScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        when (val uiState = viewModel.uiState.collectAsState().value) {
+            is UiState.Loading -> {
+                Text(text = "Loading...")
+            }
+            is UiState.Error -> {
+                Text(text = "Error: ${uiState.message}")
+        }
+            is UiState.Success -> {
+                Text(text = "Coins Loaded")
+            }
+        }
+
 
         Button(onClick = {
             navController.navigate(Screen.Detail.route + "/123")
