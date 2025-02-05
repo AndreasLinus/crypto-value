@@ -7,4 +7,4 @@ import javax.inject.Singleton
 
 
 @Singleton
-class ExampleRepository @Inject constructor(val appApi: AppApi, private val exampleDao: ExampleDao)
+class CryptoCoinRepository @Inject constructor(val cryptoCoinApi: AppApi, private val exampleDao: ExampleDao)

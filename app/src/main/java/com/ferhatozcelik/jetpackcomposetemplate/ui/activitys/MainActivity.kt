@@ -27,6 +27,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        homeViewModel.fetchDataFromApi()
+        homeViewModel.fetchCryptoCoinsList()
     }
 }
