@@ -10,7 +10,7 @@ object NetworkClient {
 
     val okHttpClient: OkHttpClient by lazy {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY // Set the desired logging level
+            level = HttpLoggingInterceptor.Level.NONE // Set the desired logging level
         }
 
         OkHttpClient.Builder()
