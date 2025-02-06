@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CurrencyResponse
+import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
 import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +25,7 @@ class HomeViewModel @Inject constructor(private val cryptoCoinRepository: Crypto
     init {
         //fetchCryptoCoinsList()
         //fetchConversionRate()
+        fakeFetchCryptoCoinDataFromApi()
     }
 
     private fun fetchConversionRate() {
@@ -38,6 +41,23 @@ class HomeViewModel @Inject constructor(private val cryptoCoinRepository: Crypto
                 }
 
                 false -> _uiState.value = UiState.Error(response.message())
+            }
+        }
+    }
+
+    private fun fakeFetchCryptoCoinDataFromApi() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading // Set loading state
+            try {
+                // Simulate a network request with a 3-second delay
+                delay(3000)
+
+                // Generate mock data
+                val cryptoDataList = generateMockCryptoDataList(20)
+
+                _uiState.value = UiState.Success(cryptoDataList) // Set success state
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error: ${e.message}") // Set error state
             }
         }
     }

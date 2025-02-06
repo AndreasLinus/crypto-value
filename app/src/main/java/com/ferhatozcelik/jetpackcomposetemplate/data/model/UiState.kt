@@ -1,6 +1,4 @@
-package com.ferhatozcelik.jetpackcomposetemplate.ui.home
-
-import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
+package com.ferhatozcelik.jetpackcomposetemplate.data.model
 
 sealed interface UiState {
     data object Loading : UiState

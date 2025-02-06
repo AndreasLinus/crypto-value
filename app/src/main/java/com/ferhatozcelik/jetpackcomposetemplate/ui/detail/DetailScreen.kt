@@ -20,8 +20,6 @@ fun DetailScreen(
     navController: NavController,
     id: Int
 ) {
-
-
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
