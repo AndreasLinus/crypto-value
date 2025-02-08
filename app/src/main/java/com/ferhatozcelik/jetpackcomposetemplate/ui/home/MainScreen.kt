@@ -25,6 +25,9 @@ import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
 import com.ferhatozcelik.jetpackcomposetemplate.navigation.Screen
 import kotlin.random.Random
 
+
+// TODO: add option for big and small views
+// TODO: add change currency bar option
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
@@ -43,7 +46,7 @@ fun MainScreen(
     }*/
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(top = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
