@@ -22,10 +22,35 @@ class HomeViewModel @Inject constructor(private val cryptoCoinRepository: Crypto
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    private val _isUsdSelected = MutableStateFlow(true)
+    val isUsdSelected: StateFlow<Boolean> = _isUsdSelected.asStateFlow()
+
     init {
         //fetchCryptoCoinsList()
         //fetchConversionRate()
         fakeFetchCryptoCoinDataFromApi()
+    }
+
+    fun changeCurrency(isUsdSelected: Boolean) {
+        _isUsdSelected.value = isUsdSelected
+
+        when (_isUsdSelected.value) {
+            true -> calculateConversionPrice(true)
+            false -> calculateConversionPrice(false)
+        }
+    }
+
+    private fun calculateConversionPrice(isUsdSelected: Boolean) {
+        if (isUsdSelected) {
+            // Generate mock data
+            val cryptoDataList = generateMockCryptoDataList(isUsd = true)
+            _uiState.value = UiState.Success(cryptoDataList) // Set success state
+        } else {
+            // Generate mock data
+            val cryptoDataList = generateMockCryptoDataList(isUsd = false)
+            _uiState.value = UiState.Success(cryptoDataList) // Set success state
+        }
+
     }
 
     private fun fetchConversionRate() {

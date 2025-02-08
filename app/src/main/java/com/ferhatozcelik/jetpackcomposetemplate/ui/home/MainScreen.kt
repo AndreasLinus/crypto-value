@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,10 +47,16 @@ fun MainScreen(
     }*/
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Row {
+            CurrencySwitch(isUsdSelected = true, onCheckedChange = viewModel::changeCurrency)
+        }
 
         when (val uiState = viewModel.uiState.collectAsState().value) {
             is UiState.Loading -> {
@@ -72,6 +79,24 @@ fun MainScreen(
         }) {
             Text(text = "Go to Detail")
         }
+    }
+}
+
+@Composable
+fun CurrencySwitch(isUsdSelected: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = "USD", color = MaterialTheme.colorScheme.onSurface)
+        Switch(
+            checked = isUsdSelected,
+            onCheckedChange = onCheckedChange
+        )
+        Text(text = "SEK", color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -189,27 +214,35 @@ fun CryptoListScreen(cryptoList: List<CryptoData>) {
 }
 
 
-fun generateMockCryptoDataList(count: Int): List<CryptoData> {
+fun generateMockCryptoDataList(count: Int = 20, isUsd: Boolean = true): List<CryptoData> {
     val symbols = listOf("BTCINR", "ETHINR", "XRPINR", "LTCINR", "DOGEINR")
     val baseAssets = listOf("BTC", "ETH", "XRP", "LTC", "DOGE")
     val quoteAssets = listOf("INR")
+
+    var currencyMultiplier = 10.0
+
+    if(isUsd){
+        currencyMultiplier = 100.0
+    }
 
     return List(count) {
         CryptoData(
             symbol = symbols.random(),
             baseAsset = baseAssets.random(),
             quoteAsset = quoteAssets.random(),
-            openPrice = String.format("%.2f", Random.nextDouble(1000.0, 100000.0)),
-            lowPrice = String.format("%.2f", Random.nextDouble(500.0, 90000.0)),
-            highPrice = String.format("%.2f", Random.nextDouble(1100.0, 110000.0)),
-            lastPrice = String.format("%.2f", Random.nextDouble(800.0, 100000.0)),
-            volume = String.format("%.2f", Random.nextDouble(0.0, 1000.0)),
-            bidPrice = String.format("%.2f", Random.nextDouble(700.0, 95000.0)),
-            askPrice = String.format("%.2f", Random.nextDouble(900.0, 105000.0)),
+            openPrice = String.format("%.2f", Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)),
+            lowPrice = String.format("%.2f", Random.nextDouble(50.0 * currencyMultiplier, 900.0 * currencyMultiplier)),
+            highPrice = String.format("%.2f", Random.nextDouble(110.0 * currencyMultiplier, 1100.0 * currencyMultiplier)),
+            lastPrice = String.format("%.2f", Random.nextDouble(80.0 * currencyMultiplier, 1000.0 * currencyMultiplier)),
+            volume = String.format("%.2f", Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)),
+            bidPrice = String.format("%.2f", Random.nextDouble(70.0 * currencyMultiplier, 950.0 * currencyMultiplier)),
+            askPrice = String.format("%.2f", Random.nextDouble(90.0 * currencyMultiplier, 1050.0 * currencyMultiplier)),
             at = System.currentTimeMillis() - Random.nextLong(
                 0,
                 86400000
             ) // Timestamp within the last 24 hours
         )
     }
+
+
 }
