@@ -1,6 +1,6 @@
-# Jetpack Compose Template
+# Crypto Coin showcase app
 
-Welcome to the Jetpack Compose Template! This template provides a structured starting point for building Android applications using the Jetpack Compose UI toolkit. Jetpack Compose simplifies UI development with a declarative approach, allowing you to create interactive and beautiful UIs with less code.
+A simple showcase app that uses compose, hilt, room, MVVM, Viewmodel, Courutines and other modern Android frameworks and components.
 
 ## Project Overview
 
@@ -17,7 +17,7 @@ This project demonstrates the use of Jetpack Compose to create a modern Android 
 
 ## Getting Started
 
-1. **Clone the Repository:** `git clone https://github.com/ferhatozcelik/jetpack-compose-template.git`
+1. **Clone the Repository:** `git clone https://github.com/AndreasLinus/crypto-value.git`
 2. **Open in Android Studio:** Import the project into Android Studio.
 3. **Build and Run:** Build and run the app to see the Jetpack Compose magic in action.
 
@@ -33,8 +33,12 @@ Feel free to customize and extend this template to match the requirements of you
 
 ## Author
 
-👤 Your Name
+👤 Andreas Filipsson
+Theming and further development
+- GitHub: [@AndreasLinus](https://github.com/AndreasLinus)
+- LinkedIn: [Andreas Filipsson](https://www.linkedin.com/in/andreas-filipsson-87264232/)
 
+Template by :
 - GitHub: [@ferhatozcelik](https://github.com/ferhatozcelik)
 - LinkedIn: [Ferhat OZCELIK](https://www.linkedin.com/in/ferhatozcelik/)
 
