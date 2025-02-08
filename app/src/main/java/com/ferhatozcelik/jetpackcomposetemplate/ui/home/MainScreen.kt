@@ -91,12 +91,14 @@ fun CurrencySwitch(isUsdSelected: Boolean, onCheckedChange: (Boolean) -> Unit) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "USD", color = MaterialTheme.colorScheme.onSurface)
+        Text(text = "SEK", color = MaterialTheme.colorScheme.onSurface)
+        Spacer(modifier = Modifier.width(8.dp))
         Switch(
             checked = isUsdSelected,
             onCheckedChange = onCheckedChange
         )
-        Text(text = "SEK", color = MaterialTheme.colorScheme.onSurface)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "USD", color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -221,7 +223,7 @@ fun generateMockCryptoDataList(count: Int = 20, isUsd: Boolean = true): List<Cry
 
     var currencyMultiplier = 10.0
 
-    if(isUsd){
+    if (isUsd) {
         currencyMultiplier = 100.0
     }
 
@@ -230,13 +232,34 @@ fun generateMockCryptoDataList(count: Int = 20, isUsd: Boolean = true): List<Cry
             symbol = symbols.random(),
             baseAsset = baseAssets.random(),
             quoteAsset = quoteAssets.random(),
-            openPrice = String.format("%.2f", Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)),
-            lowPrice = String.format("%.2f", Random.nextDouble(50.0 * currencyMultiplier, 900.0 * currencyMultiplier)),
-            highPrice = String.format("%.2f", Random.nextDouble(110.0 * currencyMultiplier, 1100.0 * currencyMultiplier)),
-            lastPrice = String.format("%.2f", Random.nextDouble(80.0 * currencyMultiplier, 1000.0 * currencyMultiplier)),
-            volume = String.format("%.2f", Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)),
-            bidPrice = String.format("%.2f", Random.nextDouble(70.0 * currencyMultiplier, 950.0 * currencyMultiplier)),
-            askPrice = String.format("%.2f", Random.nextDouble(90.0 * currencyMultiplier, 1050.0 * currencyMultiplier)),
+            openPrice = String.format(
+                "%.2f",
+                Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)
+            ),
+            lowPrice = String.format(
+                "%.2f",
+                Random.nextDouble(50.0 * currencyMultiplier, 900.0 * currencyMultiplier)
+            ),
+            highPrice = String.format(
+                "%.2f",
+                Random.nextDouble(110.0 * currencyMultiplier, 1100.0 * currencyMultiplier)
+            ),
+            lastPrice = String.format(
+                "%.2f",
+                Random.nextDouble(80.0 * currencyMultiplier, 1000.0 * currencyMultiplier)
+            ),
+            volume = String.format(
+                "%.2f",
+                Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)
+            ),
+            bidPrice = String.format(
+                "%.2f",
+                Random.nextDouble(70.0 * currencyMultiplier, 950.0 * currencyMultiplier)
+            ),
+            askPrice = String.format(
+                "%.2f",
+                Random.nextDouble(90.0 * currencyMultiplier, 1050.0 * currencyMultiplier)
+            ),
             at = System.currentTimeMillis() - Random.nextLong(
                 0,
                 86400000
