@@ -121,6 +121,13 @@ dependencies {
     implementation libs.androidx.hilt.navigation.compose
     implementation libs.androidx.navigation.compose
 
+    // Ok Http
+    implementation(libs.okhttp) // Use the latest version
+    implementation(libs.logging.interceptor.v4110) // For logging (optional but recommended)
+
+    //Timber logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
 
     // Glide
     implementation(libs.glide)
