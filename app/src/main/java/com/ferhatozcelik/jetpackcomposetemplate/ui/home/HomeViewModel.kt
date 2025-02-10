@@ -56,9 +56,9 @@ class PreviewExampleDao : ExampleDao {
 // Mock Repository for Preview
 @Singleton
 open class PreviewCryptoCoinRepository @Inject constructor(
-    cryptoCoinApi: AppApi,
-    exampleDao: ExampleDao
-) : CryptoCoinRepository(cryptoCoinApi, exampleDao) {
+    cryptoCoinApi: PreviewAppApi,
+    exampleDao: PreviewExampleDao
+) : CryptoCoinRepository(cryptoCoinApi, exampleDao){
     suspend fun getCryptoCoins(): List<CryptoData> {
         // Simulate a network request with a 1-second delay
         delay(1000)
@@ -140,7 +140,7 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
     }
 
 
-    fun fetchCryptoCoinsList() {
+    open fun fetchCryptoCoinsList() {
         viewModelScope.launch {
             val response = cryptoCoinRepository.cryptoCoinApi.getCryptoData()
 

@@ -289,9 +289,15 @@ class PreviewHomeViewModel @Inject constructor(cryptoCoinRepository: CryptoCoinR
     private val _isUsdSelected = MutableStateFlow(true)
     override val isUsdSelected: StateFlow<Boolean> = _isUsdSelected.asStateFlow()
 
+    /*override fun fetchCryptoCoinsList() {
+        // Generate mock data
+        val cryptoDataList = generateMockCryptoDataList(20)
+        _uiState.value = UiState.Success(cryptoDataList) // Set success state
+    }
+
     override fun changeCurrency(newValue: Boolean) {
         _isUsdSelected.value = newValue
-    }
+    }*/
 }
 
 @Preview(showBackground = true)
