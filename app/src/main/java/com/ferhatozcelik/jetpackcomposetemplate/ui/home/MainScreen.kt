@@ -10,6 +10,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,14 +19,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
+import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinRepository
 import com.ferhatozcelik.jetpackcomposetemplate.navigation.Screen
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 import kotlin.random.Random
 
+
+// TODO: add option for big and small views
+// TODO: add change currency bar option
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
@@ -43,10 +56,18 @@ fun MainScreen(
     }*/
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        val isUsdChecked = viewModel.isUsdSelected.collectAsState()
+
+        Row {
+            CurrencySwitch(isUsdSelected = isUsdChecked.value, onCheckedChange = viewModel::changeCurrency)
+        }
 
         when (val uiState = viewModel.uiState.collectAsState().value) {
             is UiState.Loading -> {
@@ -69,6 +90,26 @@ fun MainScreen(
         }) {
             Text(text = "Go to Detail")
         }
+    }
+}
+
+@Composable
+fun CurrencySwitch(isUsdSelected: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = "SEK", color = MaterialTheme.colorScheme.onSurface)
+        Spacer(modifier = Modifier.width(8.dp))
+        Switch(
+            checked = isUsdSelected,
+            onCheckedChange = onCheckedChange
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "USD", color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -186,27 +227,92 @@ fun CryptoListScreen(cryptoList: List<CryptoData>) {
 }
 
 
-fun generateMockCryptoDataList(count: Int): List<CryptoData> {
+fun generateMockCryptoDataList(count: Int = 20, isUsd: Boolean = true): List<CryptoData> {
     val symbols = listOf("BTCINR", "ETHINR", "XRPINR", "LTCINR", "DOGEINR")
     val baseAssets = listOf("BTC", "ETH", "XRP", "LTC", "DOGE")
     val quoteAssets = listOf("INR")
+
+    var currencyMultiplier = 10.0
+
+    if (isUsd) {
+        currencyMultiplier = 100.0
+    }
 
     return List(count) {
         CryptoData(
             symbol = symbols.random(),
             baseAsset = baseAssets.random(),
             quoteAsset = quoteAssets.random(),
-            openPrice = String.format("%.2f", Random.nextDouble(1000.0, 100000.0)),
-            lowPrice = String.format("%.2f", Random.nextDouble(500.0, 90000.0)),
-            highPrice = String.format("%.2f", Random.nextDouble(1100.0, 110000.0)),
-            lastPrice = String.format("%.2f", Random.nextDouble(800.0, 100000.0)),
-            volume = String.format("%.2f", Random.nextDouble(0.0, 1000.0)),
-            bidPrice = String.format("%.2f", Random.nextDouble(700.0, 95000.0)),
-            askPrice = String.format("%.2f", Random.nextDouble(900.0, 105000.0)),
+            openPrice = String.format(
+                "%.2f",
+                Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)
+            ),
+            lowPrice = String.format(
+                "%.2f",
+                Random.nextDouble(50.0 * currencyMultiplier, 900.0 * currencyMultiplier)
+            ),
+            highPrice = String.format(
+                "%.2f",
+                Random.nextDouble(110.0 * currencyMultiplier, 1100.0 * currencyMultiplier)
+            ),
+            lastPrice = String.format(
+                "%.2f",
+                Random.nextDouble(80.0 * currencyMultiplier, 1000.0 * currencyMultiplier)
+            ),
+            volume = String.format(
+                "%.2f",
+                Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)
+            ),
+            bidPrice = String.format(
+                "%.2f",
+                Random.nextDouble(70.0 * currencyMultiplier, 950.0 * currencyMultiplier)
+            ),
+            askPrice = String.format(
+                "%.2f",
+                Random.nextDouble(90.0 * currencyMultiplier, 1050.0 * currencyMultiplier)
+            ),
             at = System.currentTimeMillis() - Random.nextLong(
                 0,
                 86400000
             ) // Timestamp within the last 24 hours
         )
+    }
+
+
+
+
+}
+
+// Mock ViewModel for Preview
+class PreviewHomeViewModel @Inject constructor(cryptoCoinRepository: CryptoCoinRepository) :
+    HomeViewModel(cryptoCoinRepository) {
+    private val _isUsdSelected = MutableStateFlow(true)
+    override val isUsdSelected: StateFlow<Boolean> = _isUsdSelected.asStateFlow()
+
+    /*override fun fetchCryptoCoinsList() {
+        // Generate mock data
+        val cryptoDataList = generateMockCryptoDataList(20)
+        _uiState.value = UiState.Success(cryptoDataList) // Set success state
+    }
+
+    override fun changeCurrency(newValue: Boolean) {
+        _isUsdSelected.value = newValue
+    }*/
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainScreenPreview() {
+    MaterialTheme {Surface {
+        MainScreen(
+            viewModel = PreviewHomeViewModel(
+                PreviewCryptoCoinRepository(
+                    PreviewAppApi(),
+                    PreviewExampleDao()
+                )
+            ),
+            navController = rememberNavController()
+        )
+    }
     }
 }

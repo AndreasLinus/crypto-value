@@ -39,6 +39,8 @@ crashlytics = "2.9.9"
 ksp = "1.9.0-1.0.12"
 squareup-logging-interceptor = "4.7.2"
 viewpager2 = "1.0.0"
+ui-android = "1.7.7"
+foundation-layout-android = "1.7.7"
 
 [libraries]
 
@@ -101,6 +103,8 @@ ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide-ksp" }
 firebase = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "ui-android" }
+androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundation-layout-android" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
