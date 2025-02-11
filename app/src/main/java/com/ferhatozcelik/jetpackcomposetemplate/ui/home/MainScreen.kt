@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -66,7 +67,10 @@ fun MainScreen(
         val isUsdChecked = viewModel.isUsdSelected.collectAsState()
 
         Row {
-            CurrencySwitch(isUsdSelected = isUsdChecked.value, onCheckedChange = viewModel::changeCurrency)
+            CurrencySwitch(
+                isUsdSelected = isUsdChecked.value,
+                onCheckedChange = viewModel::changeCurrency
+            )
         }
 
         when (val uiState = viewModel.uiState.collectAsState().value) {
@@ -279,8 +283,6 @@ fun generateMockCryptoDataList(count: Int = 20, isUsd: Boolean = true): List<Cry
     }
 
 
-
-
 }
 
 // Mock ViewModel for Preview
@@ -303,16 +305,17 @@ class PreviewHomeViewModel @Inject constructor(cryptoCoinRepository: CryptoCoinR
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MaterialTheme {Surface {
-        MainScreen(
-            viewModel = PreviewHomeViewModel(
-                PreviewCryptoCoinRepository(
-                    PreviewAppApi(),
-                    PreviewExampleDao()
-                )
-            ),
-            navController = rememberNavController()
-        )
-    }
+    MaterialTheme {
+        Surface {
+            MainScreen(
+                viewModel = PreviewHomeViewModel(
+                    PreviewCryptoCoinRepository(
+                        PreviewAppApi(),
+                        PreviewExampleDao()
+                    )
+                ),
+                navController = rememberNavController()
+            )
+        }
     }
 }
