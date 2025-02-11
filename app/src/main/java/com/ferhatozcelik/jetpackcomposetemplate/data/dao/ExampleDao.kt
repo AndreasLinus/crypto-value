@@ -9,6 +9,9 @@ interface ExampleDao {
     @Query("SELECT * FROM example_table")
     fun getExampleData(): List<ExampleEntity>
 
+    @Query("SELECT * FROM example_table")
+    fun getCurrencyPreference(): List<ExampleEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(search: ExampleEntity?)
 
