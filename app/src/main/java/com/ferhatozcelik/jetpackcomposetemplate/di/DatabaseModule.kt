@@ -2,7 +2,7 @@ package com.ferhatozcelik.jetpackcomposetemplate.di
 
 import android.app.Application
 import androidx.room.Room
-import com.ferhatozcelik.jetpackcomposetemplate.data.dao.ExampleDao
+import com.ferhatozcelik.jetpackcomposetemplate.data.dao.UserPreferencesDao
 import com.ferhatozcelik.jetpackcomposetemplate.data.local.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -21,7 +21,7 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideExampleDao(database: AppDatabase): ExampleDao {
+    fun provideExampleDao(database: AppDatabase): UserPreferencesDao {
         return database.getExampleDao()
     }
 }

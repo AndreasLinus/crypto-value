@@ -2,13 +2,15 @@ package com.ferhatozcelik.jetpackcomposetemplate.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ferhatozcelik.jetpackcomposetemplate.data.dao.ExampleDao
+import com.ferhatozcelik.jetpackcomposetemplate.data.dao.UserPreferencesDao
 import com.ferhatozcelik.jetpackcomposetemplate.data.entity.UserPreferences
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CurrencyResponse
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
-import com.ferhatozcelik.jetpackcomposetemplate.data.remote.AppApi
-import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinRepository
+import com.ferhatozcelik.jetpackcomposetemplate.data.remote.CryptoCoinValueApi
+import com.ferhatozcelik.jetpackcomposetemplate.data.remote.CurrencyConversionApi
+import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinValueRepository
+import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CurrencyConversionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -23,27 +25,25 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 // Mock Api for Preview
-class PreviewAppApi : AppApi {
+class PreviewCryptoCoinValueApi : CryptoCoinValueApi {
     override suspend fun getCryptoData(): Response<List<CryptoData>> {
         delay(1000)
         // Return mock data
         return Response.success(generateMockCryptoDataList(20))
     }
+}
 
+class PreviewCurrencyConversionApi : CurrencyConversionApi {
     override suspend fun getSekConversionRate(): Response<CurrencyResponse> {
         TODO("Not yet implemented")
     }
 }
 
 // Mock Dao for Preview
-class PreviewExampleDao : ExampleDao {
+class PreviewUserPreferencesDao : UserPreferencesDao {
 
-    override fun getExampleData(): List<UserPreferences> {
+    override fun getUserPreferences(): List<UserPreferences> {
         return emptyList()
-    }
-
-    override fun getCurrencyPreference(): List<UserPreferences> {
-        TODO("Not yet implemented")
     }
 
     override suspend fun insert(search: UserPreferences?) {
@@ -61,21 +61,22 @@ class PreviewExampleDao : ExampleDao {
 
 // Mock Repository for Preview
 @Singleton
-open class PreviewCryptoCoinRepository @Inject constructor(
-    cryptoCoinApi: PreviewAppApi,
-    exampleDao: PreviewExampleDao
-) : CryptoCoinRepository(cryptoCoinApi, exampleDao){
-    suspend fun getCryptoCoins(): List<CryptoData> {
-        // Simulate a network request with a 1-second delay
-        delay(1000)
-        // Return mock data
-        return generateMockCryptoDataList(20)
-    }
-}
+open class PreviewCryptoCoinValueRepository @Inject constructor(
+    cryptoCoinApi: PreviewCryptoCoinValueApi
+) : CryptoCoinValueRepository(cryptoCoinApi)
+
+@Singleton
+open class PreviewCurrencyConversionRepository @Inject constructor(
+    previewCurrencyConversionApi: PreviewCurrencyConversionApi
+) : CurrencyConversionRepository(previewCurrencyConversionApi)
+
 
 @HiltViewModel
-open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: CryptoCoinRepository) :
-    ViewModel() {
+open class HomeViewModel @Inject constructor(
+    private val cryptoCoinValueRepository: CryptoCoinValueRepository,
+    private val currencyConversionRepository: CurrencyConversionRepository,
+    private val userPreferencesDao: UserPreferencesDao
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -96,7 +97,9 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
             try {
                 withContext(Dispatchers.IO) {
                     insertEntity()
-                    val isUsdSelected = cryptoCoinRepository.exampleDao.getExampleData().first().isUsdCurrency
+                    val isUsdSelected =
+                        userPreferencesDao.getUserPreferences()
+                            .first().isUsdCurrency
                     Timber.d("is usd =$isUsdSelected")
                 }
                 //_uiState.value = HomeUiState.Success(cryptoDataList) // Set success state
@@ -108,7 +111,13 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
 
 
     private suspend fun insertEntity() {
-        cryptoCoinRepository.exampleDao.insert(UserPreferences(title = "test", description = "test", isUsdCurrency = true))
+        userPreferencesDao.insert(
+            UserPreferences(
+                title = "test",
+                description = "test",
+                isUsdCurrency = true
+            )
+        )
     }
 
     open fun changeCurrency(isUsdSelected: Boolean) {
@@ -135,7 +144,7 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
 
     private fun fetchConversionRate() {
         viewModelScope.launch {
-            val response = cryptoCoinRepository.cryptoCoinApi.getSekConversionRate()
+            val response = currencyConversionRepository.currencyConversionApi.getSekConversionRate()
 
             when (response.isSuccessful) {
                 true -> {
@@ -170,7 +179,7 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
 
     open fun fetchCryptoCoinsList() {
         viewModelScope.launch {
-            val response = cryptoCoinRepository.cryptoCoinApi.getCryptoData()
+            val response = cryptoCoinValueRepository.cryptoCoinApi.getCryptoData()
 
             when (response.isSuccessful) {
                 true -> {

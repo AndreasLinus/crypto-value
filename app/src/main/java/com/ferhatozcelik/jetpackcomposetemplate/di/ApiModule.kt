@@ -1,6 +1,7 @@
 package com.ferhatozcelik.jetpackcomposetemplate.di
 
-import com.ferhatozcelik.jetpackcomposetemplate.data.remote.AppApi
+import com.ferhatozcelik.jetpackcomposetemplate.data.remote.CryptoCoinValueApi
+import com.ferhatozcelik.jetpackcomposetemplate.data.remote.CurrencyConversionApi
 import com.ferhatozcelik.jetpackcomposetemplate.util.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -36,8 +37,14 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideAppApi(retrofit: Retrofit): AppApi {
-        return retrofit.create(AppApi::class.java)
+    fun provideAppApi(retrofit: Retrofit): CryptoCoinValueApi {
+        return retrofit.create(CryptoCoinValueApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrencyConversionApi(retrofit: Retrofit): CurrencyConversionApi {
+        return retrofit.create(CurrencyConversionApi::class.java)
     }
 
 }
