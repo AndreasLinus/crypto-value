@@ -1,21 +1,25 @@
 package com.ferhatozcelik.jetpackcomposetemplate.data.dao
 
 import androidx.room.*
-import com.ferhatozcelik.jetpackcomposetemplate.data.entity.ExampleEntity
+import com.ferhatozcelik.jetpackcomposetemplate.data.entity.UserPreferences
+import com.ferhatozcelik.jetpackcomposetemplate.util.USER_PREFERENCES_TABLE_NAME
 
 @Dao
 interface ExampleDao {
 
-    @Query("SELECT * FROM example_table")
-    fun getExampleData(): List<ExampleEntity>
+    @Query("SELECT * FROM $USER_PREFERENCES_TABLE_NAME")
+    fun getExampleData(): List<UserPreferences>
+
+    @Query("SELECT * FROM $USER_PREFERENCES_TABLE_NAME")
+    fun getCurrencyPreference(): List<UserPreferences>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(search: ExampleEntity?)
+    suspend fun insert(search: UserPreferences?)
 
     @Update
-    suspend fun update(search: ExampleEntity)
+    suspend fun update(search: UserPreferences)
 
     @Delete
-    suspend fun delete(search: ExampleEntity)
+    suspend fun delete(search: UserPreferences)
 
 }

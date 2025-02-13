@@ -4,13 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.ferhatozcelik.jetpackcomposetemplate.data.dao.ExampleDao
-import com.ferhatozcelik.jetpackcomposetemplate.data.entity.ExampleEntity
+import com.ferhatozcelik.jetpackcomposetemplate.data.entity.UserPreferences
 import com.ferhatozcelik.jetpackcomposetemplate.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [ExampleEntity::class], version = 1)
+@Database(entities = [UserPreferences::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
