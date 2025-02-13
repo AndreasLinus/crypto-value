@@ -8,18 +8,12 @@ import retrofit2.http.*
 interface AppApi {
 
     @Headers("Accept: application/json")
-    @GET(BASE_PATH)
+    @GET("https://api.wazirx.com/sapi/v1/tickers/24hr")
     suspend fun getCryptoData(): Response<List<CryptoData>>
 
     @Headers("Accept: application/json")
-    @GET(BASE_PATH_CURRENCY)
+    @GET("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024-03-06/v1/currencies/usd.json")
     suspend fun getSekConversionRate(): Response<CurrencyResponse>
-
-    companion object {
-        const val BASE_PATH = "https://api.wazirx.com/sapi/v1/tickers/24hr"
-        const val BASE_PATH_CURRENCY =
-            "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024-03-06/v1/currencies/usd.json"
-    }
 
 }
 
