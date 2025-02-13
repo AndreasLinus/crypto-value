@@ -3,7 +3,7 @@ package com.ferhatozcelik.jetpackcomposetemplate.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ferhatozcelik.jetpackcomposetemplate.data.dao.ExampleDao
-import com.ferhatozcelik.jetpackcomposetemplate.data.entity.ExampleEntity
+import com.ferhatozcelik.jetpackcomposetemplate.data.entity.UserPreferences
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CurrencyResponse
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
@@ -38,23 +38,23 @@ class PreviewAppApi : AppApi {
 // Mock Dao for Preview
 class PreviewExampleDao : ExampleDao {
 
-    override fun getExampleData(): List<ExampleEntity> {
+    override fun getExampleData(): List<UserPreferences> {
         return emptyList()
     }
 
-    override fun getCurrencyPreference(): List<ExampleEntity> {
+    override fun getCurrencyPreference(): List<UserPreferences> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insert(search: ExampleEntity?) {
+    override suspend fun insert(search: UserPreferences?) {
 
     }
 
-    override suspend fun update(search: ExampleEntity) {
+    override suspend fun update(search: UserPreferences) {
 
     }
 
-    override suspend fun delete(search: ExampleEntity) {
+    override suspend fun delete(search: UserPreferences) {
 
     }
 }
@@ -108,7 +108,7 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
 
 
     private suspend fun insertEntity() {
-        cryptoCoinRepository.exampleDao.insert(ExampleEntity(title = "test", description = "test", isUsdCurrency = true))
+        cryptoCoinRepository.exampleDao.insert(UserPreferences(title = "test", description = "test", isUsdCurrency = true))
     }
 
     open fun changeCurrency(isUsdSelected: Boolean) {
