@@ -26,7 +26,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
-import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinRepository
+import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinValueRepository
+import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CurrencyConversionRepository
 import com.ferhatozcelik.jetpackcomposetemplate.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -284,8 +285,16 @@ fun generateMockCryptoDataList(count: Int = 20, isUsd: Boolean = true): List<Cry
 }
 
 // Mock ViewModel for Preview
-class PreviewHomeViewModel @Inject constructor(cryptoCoinRepository: CryptoCoinRepository) :
-    HomeViewModel(cryptoCoinRepository) {
+class PreviewHomeViewModel @Inject constructor(
+    cryptoCoinValueRepository: CryptoCoinValueRepository,
+    conversionRepository: CurrencyConversionRepository,
+    userPreferencesDao: PreviewUserPreferencesDao
+) :
+    HomeViewModel(
+        cryptoCoinValueRepository = cryptoCoinValueRepository,
+        currencyConversionRepository = conversionRepository,
+        userPreferencesDao = userPreferencesDao
+    ) {
     private val _isUsdSelected = MutableStateFlow(true)
     override val isUsdSelected: StateFlow<Boolean> = _isUsdSelected.asStateFlow()
 
@@ -307,12 +316,10 @@ fun MainScreenPreview() {
         Surface {
             MainScreen(
                 viewModel = PreviewHomeViewModel(
-                    PreviewCryptoCoinRepository(
-                        PreviewAppApi(),
-                        PreviewUserPreferencesDao()
-                    )
-                ),
-                navController = rememberNavController()
+                    cryptoCoinValueRepository = PreviewCryptoCoinValueRepository(cryptoCoinApi = PreviewCryptoCoinValueApi()),
+                    conversionRepository = PreviewCurrencyConversionRepository(previewCurrencyConversionApi = PreviewCurrencyConversionApi()),
+                    userPreferencesDao = PreviewUserPreferencesDao()),
+                    navController = rememberNavController()
             )
         }
     }
