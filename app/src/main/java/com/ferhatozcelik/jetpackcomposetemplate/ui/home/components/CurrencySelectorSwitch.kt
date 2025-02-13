@@ -1,6 +1,5 @@
 package com.ferhatozcelik.jetpackcomposetemplate.ui.home.components
 
-import android.provider.MediaStore.Images
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -34,7 +32,7 @@ fun CurrencySelectorSwitch() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.flag_for_sweden_svgrepo_com),
+                painter = painterResource(id = R.drawable.ic_flag_sweden),
                 contentDescription = null
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -48,7 +46,7 @@ fun CurrencySelectorSwitch() {
             Text(text = "USD", color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.width(8.dp))
             Image(
-                painter = painterResource(id = R.drawable.united_states_svgrepo_com),
+                painter = painterResource(id = R.drawable.ic_flag_united_states),
                 contentDescription = null
             )
         }
