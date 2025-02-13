@@ -2,7 +2,7 @@ package com.ferhatozcelik.jetpackcomposetemplate.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ferhatozcelik.jetpackcomposetemplate.data.dao.ExampleDao
+import com.ferhatozcelik.jetpackcomposetemplate.data.dao.UserPreferencesDao
 import com.ferhatozcelik.jetpackcomposetemplate.data.entity.UserPreferences
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.CurrencyResponse
@@ -36,14 +36,10 @@ class PreviewAppApi : AppApi {
 }
 
 // Mock Dao for Preview
-class PreviewExampleDao : ExampleDao {
+class PreviewUserPreferencesDao : UserPreferencesDao {
 
-    override fun getExampleData(): List<UserPreferences> {
+    override fun getUserPreferences(): List<UserPreferences> {
         return emptyList()
-    }
-
-    override fun getCurrencyPreference(): List<UserPreferences> {
-        TODO("Not yet implemented")
     }
 
     override suspend fun insert(search: UserPreferences?) {
@@ -63,7 +59,7 @@ class PreviewExampleDao : ExampleDao {
 @Singleton
 open class PreviewCryptoCoinRepository @Inject constructor(
     cryptoCoinApi: PreviewAppApi,
-    exampleDao: PreviewExampleDao
+    exampleDao: PreviewUserPreferencesDao
 ) : CryptoCoinRepository(cryptoCoinApi, exampleDao){
     suspend fun getCryptoCoins(): List<CryptoData> {
         // Simulate a network request with a 1-second delay
@@ -96,7 +92,7 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
             try {
                 withContext(Dispatchers.IO) {
                     insertEntity()
-                    val isUsdSelected = cryptoCoinRepository.exampleDao.getExampleData().first().isUsdCurrency
+                    val isUsdSelected = cryptoCoinRepository.userPreferencesDao.getUserPreferences().first().isUsdCurrency
                     Timber.d("is usd =$isUsdSelected")
                 }
                 //_uiState.value = HomeUiState.Success(cryptoDataList) // Set success state
@@ -108,7 +104,7 @@ open class HomeViewModel @Inject constructor(private val cryptoCoinRepository: C
 
 
     private suspend fun insertEntity() {
-        cryptoCoinRepository.exampleDao.insert(UserPreferences(title = "test", description = "test", isUsdCurrency = true))
+        cryptoCoinRepository.userPreferencesDao.insert(UserPreferences(title = "test", description = "test", isUsdCurrency = true))
     }
 
     open fun changeCurrency(isUsdSelected: Boolean) {

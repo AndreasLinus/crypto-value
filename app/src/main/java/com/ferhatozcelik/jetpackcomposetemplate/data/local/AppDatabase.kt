@@ -3,7 +3,7 @@ package com.ferhatozcelik.jetpackcomposetemplate.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.ferhatozcelik.jetpackcomposetemplate.data.dao.ExampleDao
+import com.ferhatozcelik.jetpackcomposetemplate.data.dao.UserPreferencesDao
 import com.ferhatozcelik.jetpackcomposetemplate.data.entity.UserPreferences
 import com.ferhatozcelik.jetpackcomposetemplate.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +14,7 @@ import javax.inject.Provider
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun getExampleDao(): ExampleDao
+    abstract fun getExampleDao(): UserPreferencesDao
 
     class Callback @Inject constructor(
         private val database: Provider<AppDatabase>,

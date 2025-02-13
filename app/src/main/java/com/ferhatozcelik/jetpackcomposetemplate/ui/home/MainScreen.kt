@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -29,7 +28,6 @@ import com.ferhatozcelik.jetpackcomposetemplate.data.model.CryptoData
 import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
 import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinRepository
 import com.ferhatozcelik.jetpackcomposetemplate.navigation.Screen
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -311,7 +309,7 @@ fun MainScreenPreview() {
                 viewModel = PreviewHomeViewModel(
                     PreviewCryptoCoinRepository(
                         PreviewAppApi(),
-                        PreviewExampleDao()
+                        PreviewUserPreferencesDao()
                     )
                 ),
                 navController = rememberNavController()
