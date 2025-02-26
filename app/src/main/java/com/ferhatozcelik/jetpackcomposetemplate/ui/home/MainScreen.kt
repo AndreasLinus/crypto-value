@@ -29,6 +29,9 @@ import com.ferhatozcelik.jetpackcomposetemplate.data.model.UiState
 import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CryptoCoinValueRepository
 import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CurrencyConversionRepository
 import com.ferhatozcelik.jetpackcomposetemplate.navigation.Screen
+import com.ferhatozcelik.jetpackcomposetemplate.ui.home.components.CatSwitch
+import com.ferhatozcelik.jetpackcomposetemplate.ui.home.components.LoadingScreen
+import com.ferhatozcelik.jetpackcomposetemplate.ui.home.components.LoadingScreenPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,16 +48,6 @@ fun MainScreen(
     navController: NavHostController
 ) {
 
-    /*MaterialTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            CryptoListScreen()
-        }
-    }*/
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,16 +58,10 @@ fun MainScreen(
 
         val isUsdChecked = viewModel.isUsdSelected.collectAsState()
 
-        Row {
-            CurrencySwitch(
-                isUsdSelected = isUsdChecked.value,
-                onCheckedChange = viewModel::changeCurrency
-            )
-        }
 
         when (val uiState = viewModel.uiState.collectAsState().value) {
             is UiState.Loading -> {
-                Text(text = "Loading...")
+                LoadingScreen()
             }
 
             is UiState.Error -> {
@@ -82,6 +69,12 @@ fun MainScreen(
             }
 
             is UiState.Success -> {
+                Row {
+                    CurrencySwitch(
+                        isUsdSelected = isUsdChecked.value,
+                        onCheckedChange = viewModel::changeCurrency
+                    )
+                }
                 Text(text = "Coins Loaded")
                 CryptoListScreen(cryptoList = uiState.cryptoDataList)
             }
@@ -107,10 +100,8 @@ fun CurrencySwitch(isUsdSelected: Boolean, onCheckedChange: (Boolean) -> Unit) {
     ) {
         Text(text = "SEK", color = MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.width(8.dp))
-        Switch(
-            checked = isUsdSelected,
-            onCheckedChange = onCheckedChange
-        )
+        CatSwitch(checked = isUsdSelected,
+            onCheckedChange = onCheckedChange)
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = "USD", color = MaterialTheme.colorScheme.onSurface)
     }
@@ -298,15 +289,6 @@ class PreviewHomeViewModel @Inject constructor(
     private val _isUsdSelected = MutableStateFlow(true)
     override val isUsdSelected: StateFlow<Boolean> = _isUsdSelected.asStateFlow()
 
-    /*override fun fetchCryptoCoinsList() {
-        // Generate mock data
-        val cryptoDataList = generateMockCryptoDataList(20)
-        _uiState.value = UiState.Success(cryptoDataList) // Set success state
-    }
-
-    override fun changeCurrency(newValue: Boolean) {
-        _isUsdSelected.value = newValue
-    }*/
 }
 
 @Preview(showBackground = true)
