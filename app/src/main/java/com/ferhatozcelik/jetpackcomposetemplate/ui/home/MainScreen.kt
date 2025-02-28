@@ -11,7 +11,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,7 +30,6 @@ import com.ferhatozcelik.jetpackcomposetemplate.data.repository.CurrencyConversi
 import com.ferhatozcelik.jetpackcomposetemplate.navigation.Screen
 import com.ferhatozcelik.jetpackcomposetemplate.ui.home.components.CatSwitch
 import com.ferhatozcelik.jetpackcomposetemplate.ui.home.components.LoadingScreen
-import com.ferhatozcelik.jetpackcomposetemplate.ui.home.components.LoadingScreenPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -97,14 +95,11 @@ fun CurrencySwitch(isUsdSelected: Boolean, onCheckedChange: (Boolean) -> Unit) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Dogs", color = MaterialTheme.colorScheme.onSurface)
-        Spacer(modifier = Modifier.width(8.dp))
         CatSwitch(
             checked = isUsdSelected,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
         )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = "Cats", color = MaterialTheme.colorScheme.onSurface)
+
     }
 }
 
