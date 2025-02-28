@@ -75,7 +75,6 @@ fun MainScreen(
                         onCheckedChange = viewModel::changeCurrency
                     )
                 }
-                Text(text = "Coins Loaded")
                 CryptoListScreen(cryptoList = uiState.cryptoDataList)
             }
         }
@@ -98,12 +97,14 @@ fun CurrencySwitch(isUsdSelected: Boolean, onCheckedChange: (Boolean) -> Unit) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "SEK", color = MaterialTheme.colorScheme.onSurface)
+        Text(text = "Dogs", color = MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.width(8.dp))
-        CatSwitch(checked = isUsdSelected,
-            onCheckedChange = onCheckedChange)
+        CatSwitch(
+            checked = isUsdSelected,
+            onCheckedChange = onCheckedChange
+        )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = "USD", color = MaterialTheme.colorScheme.onSurface)
+        Text(text = "Cats", color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -299,9 +300,12 @@ fun MainScreenPreview() {
             MainScreen(
                 viewModel = PreviewHomeViewModel(
                     cryptoCoinValueRepository = PreviewCryptoCoinValueRepository(cryptoCoinApi = PreviewCryptoCoinValueApi()),
-                    conversionRepository = PreviewCurrencyConversionRepository(previewCurrencyConversionApi = PreviewCurrencyConversionApi()),
-                    userPreferencesDao = PreviewUserPreferencesDao()),
-                    navController = rememberNavController()
+                    conversionRepository = PreviewCurrencyConversionRepository(
+                        previewCurrencyConversionApi = PreviewCurrencyConversionApi()
+                    ),
+                    userPreferencesDao = PreviewUserPreferencesDao()
+                ),
+                navController = rememberNavController()
             )
         }
     }
