@@ -23,13 +23,15 @@ import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 // Mock Api for Preview
 class PreviewCryptoCoinValueApi : CryptoCoinValueApi {
     override suspend fun getCryptoData(): Response<List<CryptoData>> {
         delay(1000)
         // Return mock data
-        return Response.success(generateMockCryptoDataList(20))
+
+        return getCryptoData()
     }
 }
 
@@ -87,7 +89,7 @@ open class HomeViewModel @Inject constructor(
     init {
         //fetchCryptoCoinsList()
         //fetchConversionRate()
-        fakeFetchCryptoCoinDataFromApi()
+        mockFetchCryptoCoinDataFromApi()
         insertAndFetchDataFromDb()
     }
 
@@ -131,11 +133,9 @@ open class HomeViewModel @Inject constructor(
 
     private fun calculateConversionPrice(isUsdSelected: Boolean) {
         if (isUsdSelected) {
-            // Generate mock data
             val cryptoDataList = generateMockCryptoDataList(isUsd = true)
             _uiState.value = UiState.Success(cryptoDataList) // Set success state
         } else {
-            // Generate mock data
             val cryptoDataList = generateMockCryptoDataList(isUsd = false)
             _uiState.value = UiState.Success(cryptoDataList) // Set success state
         }
@@ -159,7 +159,7 @@ open class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fakeFetchCryptoCoinDataFromApi() {
+    private fun mockFetchCryptoCoinDataFromApi() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading // Set loading state
             try {
@@ -194,4 +194,59 @@ open class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    private fun generateMockCryptoDataList(count: Int = 20, isUsd: Boolean = true): List<CryptoData> {
+        val symbols = listOf("BTCINR", "ETHINR", "XRPINR", "LTCINR", "DOGEINR")
+        val baseAssets = listOf("BTC", "ETH", "XRP", "LTC", "DOGE")
+        val quoteAssets = listOf("INR")
+
+        var currencyMultiplier = 10.0
+
+        if (isUsd) {
+            currencyMultiplier = 100.0
+        }
+
+        return List(count) {
+            CryptoData(
+                symbol = symbols.random(),
+                baseAsset = baseAssets.random(),
+                quoteAsset = quoteAssets.random(),
+                openPrice = String.format(
+                    "%.2f",
+                    Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)
+                ),
+                lowPrice = String.format(
+                    "%.2f",
+                    Random.nextDouble(50.0 * currencyMultiplier, 900.0 * currencyMultiplier)
+                ),
+                highPrice = String.format(
+                    "%.2f",
+                    Random.nextDouble(110.0 * currencyMultiplier, 1100.0 * currencyMultiplier)
+                ),
+                lastPrice = String.format(
+                    "%.2f",
+                    Random.nextDouble(80.0 * currencyMultiplier, 1000.0 * currencyMultiplier)
+                ),
+                volume = String.format(
+                    "%.2f",
+                    Random.nextDouble(10.0 * currencyMultiplier, 100.0 * currencyMultiplier)
+                ),
+                bidPrice = String.format(
+                    "%.2f",
+                    Random.nextDouble(70.0 * currencyMultiplier, 950.0 * currencyMultiplier)
+                ),
+                askPrice = String.format(
+                    "%.2f",
+                    Random.nextDouble(90.0 * currencyMultiplier, 1050.0 * currencyMultiplier)
+                ),
+                at = System.currentTimeMillis() - Random.nextLong(
+                    0,
+                    86400000
+                ) // Timestamp within the last 24 hours
+            )
+        }
+
+
+    }
+
 }
